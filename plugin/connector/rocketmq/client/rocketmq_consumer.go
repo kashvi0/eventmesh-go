@@ -19,12 +19,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/apache/incubator-eventmesh/eventmesh-server-go/plugin/connector/rocketmq/constants"
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
-	"strconv"
-	"strings"
 )
 
 type SubscribeFunc func(context.Context, ...*primitive.MessageExt) (consumer.ConsumeResult, error)
@@ -144,7 +145,7 @@ func (r *RocketMQConsumerWrapper) getConsumerOptionsFromProperties(properties ma
 	}
 	consumerGroup := clientConfig.ConsumerGroup
 	if isBroadCasting {
-		consumerGroup = fmt.Sprintf("%s-%s", constants.ConsumerGroupBroadcastPrefix, consumerGroup)
+		_ = fmt.Sprintf("%s-%s", constants.ConsumerGroupBroadcastPrefix, consumerGroup)
 	}
 	options = append(options, consumer.WithGroupName(clientConfig.ConsumerGroup))
 
